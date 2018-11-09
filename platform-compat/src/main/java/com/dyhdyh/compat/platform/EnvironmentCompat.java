@@ -1,18 +1,33 @@
 package com.dyhdyh.compat.platform;
 
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.os.Environment;
 
 import java.io.File;
 
 /**
  * @author dengyuhan
- *         created 2018/7/13 13:44
+ * created 2018/7/13 13:44
  */
 public final class EnvironmentCompat {
     private static final String[] MODEL_PACKAGE = new String[]{"com.htc", "com.meizu.mstore", "com.sonyericsson.android.camera", "com.yulong.android.settings.backup", "com.bbk.account", "com.gionee.account"};
+    private static int mModelIndex = -1;
 
+    private static int getModelIndex(Context context) {
+        if (mModelIndex <= -1) {
+            for (int i = 0; i < MODEL_PACKAGE.length; i++) {
+                try {
+                    if (context.getPackageManager().getPackageInfo(MODEL_PACKAGE[i], 0) != null) {
+                        mModelIndex = i;
+                        break;
+                    }
+                } catch (Exception ignored) {
+
+                }
+            }
+        }
+        return mModelIndex;
+    }
 
     /**
      * 获取相机目录
@@ -21,17 +36,7 @@ public final class EnvironmentCompat {
      * @return
      */
     public static File getCameraDirectory(Context context) {
-        int index = -1;
-        for (int i = 0; i < MODEL_PACKAGE.length; i++) {
-            try {
-                if (context.getPackageManager().getPackageInfo(MODEL_PACKAGE[i], 0) != null) {
-                    index = i;
-                    break;
-                }
-            } catch (PackageManager.NameNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
+        final int index = getModelIndex(context);
         final File storageDirectory = Environment.getExternalStorageDirectory();
         File file = null;
         switch (index) {
