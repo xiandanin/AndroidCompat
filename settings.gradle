@@ -1,1 +1,1 @@
-include ':app', ':platform-compat'
+include ':app', ':android-api-compat'

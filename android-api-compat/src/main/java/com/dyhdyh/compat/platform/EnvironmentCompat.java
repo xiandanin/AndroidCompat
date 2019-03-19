@@ -13,6 +13,9 @@ public final class EnvironmentCompat {
     private static final String[] MODEL_PACKAGE = new String[]{"com.htc", "com.meizu.mstore", "com.sonyericsson.android.camera", "com.yulong.android.settings.backup", "com.bbk.account", "com.gionee.account"};
     private static int mModelIndex = -1;
 
+    private EnvironmentCompat() {
+    }
+
     private static int getModelIndex(Context context) {
         if (mModelIndex <= -1) {
             for (int i = 0; i < MODEL_PACKAGE.length; i++) {
@@ -44,10 +47,7 @@ public final class EnvironmentCompat {
                 file = new File(storageDirectory, "/DCIM/100MEDIA");
                 break;
             case 1:
-                file = new File(storageDirectory, "/Camera");
-                if (!file.exists()) {
-                    file = new File(storageDirectory, "/DCIM");
-                }
+                file = new File(storageDirectory, "/DCIM");
                 break;
             case 2:
                 file = new File(storageDirectory, "/DCIM/100ANDRO");
